@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pydmdll",
-    version="0.0.3",
+    version="0.0.4",
     author="Gaoyongxian666",
     author_email="g1695698547@163.com",
     description="大漠插件dm.dll的Python接口",
@@ -31,3 +31,7 @@ setuptools.setup(
 # mkdocstrings安装，你提供requirements.txt就好
 # 不用生成site文件夹，没有太大用
 # Linux不允许导入pywin32，可以用try
+
+# 笔记2：package_data={'pydmdll': ["dm.dll"]},包名可不是随便写的
+# python setup.py sdist bdist_wheel生成文件
+# twine upload dist/*
