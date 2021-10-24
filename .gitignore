@@ -1,4 +1,4 @@
-*_doc
+_doc
 *.egg
 *.egg-info
 dist

@@ -1,0 +1,23 @@
+site_name: pydmdll
+
+
+nav:
+    - '首页': index.md
+    - '文档': doc.md
+
+theme:
+#  name: "material"
+  name: "readthedocs"
+
+plugins:
+- search
+- mkdocstrings:
+    default_handler: python
+    handlers:
+      python:
+        rendering:
+          show_source: false
+        setup_commands:
+          - import sys
+          - sys.path.insert(0, "..")
+
