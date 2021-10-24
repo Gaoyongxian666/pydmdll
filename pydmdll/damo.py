@@ -9,7 +9,10 @@
 import os
 import time
 import ctypes
-from win32com.client import Dispatch
+try:
+    from win32com.client import Dispatch
+except:
+    pass
 
 
 class DM:
