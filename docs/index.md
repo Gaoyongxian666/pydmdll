@@ -14,7 +14,7 @@ Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也�
 ### 项目
 
 * [Github](https://github.com/Gaoyongxian666/pydmdll)
-* [在线文档](https://pydmdll.readthedocs.io/en/latest/)
+* [在线文档](https://pydmdll.readthedocs.io/zh/latest/)
 
 ### 功能  
 

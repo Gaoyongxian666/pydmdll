@@ -26,3 +26,8 @@ setuptools.setup(
         'Source': 'https://github.com/Gaoyongxian666/pydmdll',
     },
 )
+
+# 笔记1：mkdocs.yml和项目同级在根目录，保证/docs/低一级就可以
+# mkdocstrings安装，你提供requirements.txt就好
+# 不用生成site文件夹，没有太大用
+# Linux不允许导入pywin32，可以用try
