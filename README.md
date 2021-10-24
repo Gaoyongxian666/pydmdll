@@ -1,3 +1,5 @@
+# Welcome to pydmdll
+
 ### 前言
 Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也很人性化，最后实在没有办法了再使用本包，推荐结合使用。比如：本包没有监听键盘的功能，你完全可以再开一个线程，使用Keyboard进行监听。
 
@@ -64,6 +66,14 @@ Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也�
         # 推荐相对移动
         dm.MoveR(100,100)
 
+### 注意
+    在多线程要注意要初始化pythoncom，否则每次都要注册DM。
+
+    import pythoncom
+    pythoncom.CoInitialize()
+    dm = DM()
+
+    单线程情况下不用设置
 
 ### 其他
 

@@ -31,7 +31,7 @@ class DM:
         if dm_dll_path is None:
             # 没指定dm.dll就用默认的dm.dll
             self.dm_dll_path = os.path.join(os.path.dirname(__file__.replace('/', '\\')), 'dm.dll')
-            print("self.dm_dll_path",self.dm_dll_path)
+            # print("self.dm_dll_path",self.dm_dll_path)
             # self.dm_dll_path = os.path.join(os.path.dirname(sys.modules["pydmdll"].__file__), 'dm.dll')
             # print("self.dm_dll_path",self.dm_dll_path)
 
