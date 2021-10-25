@@ -1,15 +1,16 @@
 # Welcome to pydmdll
 
 ### 前言
-Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也很人性化，最后实在没有办法了再使用本包，推荐结合使用。比如：本包没有监听键盘的功能，你完全可以再开一个线程，使用Keyboard进行监听。
+Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也很人性化，最后实在没有办法了再使用大漠。    
+推荐结合使用：比如：大漠没有监听键盘的功能，你完全可以再开一个线程，使用`Keyboard`进行监听。
 
-* PyAutoGUI侧重于鼠标，键盘，截图，消息框的功能  
-* Pywinauto侧重对CS的操作，对进程，窗体进行操作  
-* Keyboard侧重于键盘，监听键盘，设置热键，键盘记录等功能
+* `Pyautogui`侧重于鼠标，键盘，截图，消息框的功能  
+* `Pywinauto`侧重对CS的操作，对进程，窗体进行操作  
+* `Keyboard`侧重于键盘，监听键盘，设置热键，键盘记录等功能
 
 ### 简介
 
-**仅支持32位Python3**，封装了大漠插件免费功能部分，实现了用python来调用模拟键盘驱动库dm.dll,主要是解决鼠标在游戏内部无法拖拽的问题。
+`pydmdll`**仅支持32位Python3**，实现了大漠插件免费功能部分，内部封装的是`V3.1233`版本的`dm.dll`.初衷是为了解决鼠标在游戏内部无法拖拽的问题。
 
 ### 项目
 
@@ -28,29 +29,31 @@ Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也�
 
 ### 开始
     from pydmdll import DM
-
+        
     if __name__ == '__main__':
-        dm=DM()
+        dm = DM()
+        # dm = DM(dm_dll_path="你自己的版本路径")
     
+        # 取消注册
+        # dm.Un_reg()
+    
+        # 打开记事本
         os.system("start notepad.exe")
         time.sleep(1)
     
         # 窗口句柄就是一个int类型的数字
-        txt_hwnd=dm.FindWindow("","记事本")
+        txt_hwnd = dm.FindWindow("", "记事本")
         print(txt_hwnd)
     
         # 最大化指定窗口,同时激活窗口.
-        f=dm.SetWindowState(txt_hwnd,4)
-        print(f)
+        f = dm.SetWindowState(txt_hwnd, 1)
+        # print(f)
     
         # 使记事本窗口移动
-        dm.MoveWindow(txt_hwnd,10,10)
-    
-        # 向指定窗口输入字符串
-        dm.SendString(txt_hwnd,"你好帅了")
+        dm.MoveWindow(txt_hwnd, 10, 10)
     
         # 打印注册路径
-        path=dm.GetBasePath()
+        path = dm.GetBasePath()
         print(path)
     
         # 获取标题还有.py的所有句柄
@@ -64,41 +67,30 @@ Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也�
         #     dm.MoveWindow(int(hwnd),100,100)
     
         # 推荐相对移动
-        dm.MoveR(100,100)
+        dm.MoveR(40, 10)
 
 ### 注意
-    在多线程要注意要初始化pythoncom，否则每次都要注册DM。
+    在线程里面使用dm，要注意初始化pythoncom，否则每次都要注册DM，单线程情况下不用设置。
 
     import pythoncom
     pythoncom.CoInitialize()
     dm = DM()
 
-    单线程情况下不用设置
-
-### 其他
-
-本包可以直接使用，不用手动注册dll，首次运行会自动调用UCA管理员注册。 如果你是想使用你自己本地的dm.dll或者打包应用，那你就需要传递本地路径参数了。  
-
-大型游戏一般为了效率通常直接读写硬件接口，而主流的模拟鼠标键盘方案都是调用win32 api，在游戏内部win32可以实现按键事件，点击事件，但是拖拽通常是实现不了，所以你可以试试本包。
-
-大漠插件是用vb语言写的一个闭源且收费的的dll，而且它没有官网，网上好多都是注入病毒包装的dm.dll，不懂电脑的要慎重使用网上下载的插件。
-
-这就是一个模拟键盘鼠标的库，如果你有其他需求，我相信python一定有其他包可以实现。
-
-
-### 系统权限
-
-* 右键-管理员运行
-* 使用UCA-通过Python的ctypes
-
 
     管理员运行cmd命令，/C代表打开执行之后直接关闭
     注意cmd会直接运行你传入的命令，如果你使用/K 参数保留命令行，不会显示你传入的命令，但确实已经执行了，如果有回显你才会看到
+    
     ctypes.windll.shell32.ShellExecuteW(None, "runas", "cmd.exe", "/C %s" % self.cmd_un_dll, None, 1)
 
     管理员运行本程序代码，通常在最开始执行，即整个代码以管理员运行
+
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
 
+### 其他
+
+`pydmdll`可以直接使用，默认使用的是内部封装的是`V3.1233`版本的`dm.dll`，也可以指定本地的`dm.dll`。
+
+`大漠插件`是用vb语言写的一个闭源且收费的的`dll`，`V3.1233`是其最后一个免费的版本，当然也仅是免费使用部分功能。  
 
 
 ### 键盘代码

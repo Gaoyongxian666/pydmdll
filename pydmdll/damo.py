@@ -9,6 +9,7 @@
 import os
 import time
 import ctypes
+
 try:
     from win32com.client import Dispatch
 except:
@@ -25,7 +26,7 @@ class DM:
         大漠插件初始化并且完成注册dm.dll
 
         Args:
-            dm_dll_path: dm.dll路径。如果你想打包的话记得传入本地dll路径，本机使用不需要传入，会调用默认包目录下的dll文件
+            dm_dll_path: dm.dll路径。如果你想使用本地的dm.dll,需要传递路径。
         """
         self.dm_dll_path = dm_dll_path
         if dm_dll_path is None:
@@ -39,13 +40,13 @@ class DM:
 
         # 判断是否已经注册注册成功返回版本信息
         if self.__is_reg:
-            print('版本：', self.ver(), '，ID：', self.GetID(), '，注册路径：', self.GetBasePath() + 'dm.dll')
+            print("成功注册："+'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:', self.GetBasePath() + 'dm.dll')
         else:
             self.__reg_as_admin()
             if self.__is_reg:
-                print('版本：', self.ver(), '，ID：', self.GetID(), '，注册路径：', self.GetBasePath() + 'dm.dll')
+                print("成功注册："+'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:', self.GetBasePath() + 'dm.dll')
             else:
-                print(time.strftime('%Y-%m-%d-%H:%M:%S', time.localtime(time.time())) + "：dll注册失败")
+                print(time.strftime("成功注册："+'%Y-%m-%d-%H:%M:%S', time.localtime(time.time())) + "：dll注册失败")
 
     def __unreg_as_admin(self) -> None:
         """
@@ -60,6 +61,7 @@ class DM:
         else:
             ctypes.windll.shell32.ShellExecuteW(None, "runas", "cmd.exe", "/C %s" % self.cmd_un_dll, None, 1)
             time.sleep(3)
+            print("删除注册："+'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:', self.GetBasePath() + 'dm.dll')
 
     def __reg_as_admin(self) -> None:
         """
@@ -110,17 +112,16 @@ class DM:
         Returns:
             返回str类型。
         """
-        ret = '版本： ' + str(self.ver()) + '，ID：' + str(self.GetID())
+        ret = '版本：' + str(self.ver()) + '，ID：' + str(self.GetID())
         return ret
 
-
     def Un_reg(self) -> None:
-        '''
+        """
         取消已经注册的dm.dll
 
         Returns:
             无返回值
-        '''
+        """
         self.__unreg_as_admin()
 
     """----------------------------------------窗口设置------------------------------------------------"""
@@ -363,7 +364,7 @@ class DM:
         Returns:
             (指定的窗口句柄,窗口左上角X坐标,窗口左上角Y坐标 窗口右下角X坐标,窗口右下角Y坐标)
         """
-        return self.dm.GetWindowRect(self, hwnd, 1, 1, 1, 1)
+        return self.dm.GetWindowRect(hwnd, 1, 1, 1, 1)
 
     def GetWindowState(self, hwnd: int, flag: int) -> int:
         """
@@ -384,7 +385,8 @@ class DM:
             0代表失败，1代表成功
 
         """
-        return self.dm.GetWindowState(hwnd, flag)
+
+        self.dm.GetWindowState(hwnd, flag)
 
     def GetWindowTitle(self, hwnd: int) -> str:
         """

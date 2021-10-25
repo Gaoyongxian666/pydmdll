@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pydmdll",
-    version="0.0.5",
+    version="0.0.6",
     author="Gaoyongxian666",
     author_email="g1695698547@163.com",
     description="大漠插件dm.dll的Python接口",
@@ -28,7 +28,7 @@ setuptools.setup(
 )
 
 # 笔记1：mkdocs.yml和项目同级在根目录，保证/docs/低一级就可以
-# mkdocstrings安装，你提供requirements.txt就好
+# 在readthedocs网站上mkdocstrings安装，你提供requirements.txt就好
 # 不用生成site文件夹，没有太大用
 # Linux不允许导入pywin32，可以用try
 
