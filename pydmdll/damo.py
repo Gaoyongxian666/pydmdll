@@ -7,6 +7,7 @@
 @contact: g1695698547@163.com
 """
 import os
+import struct
 import time
 import ctypes
 
@@ -18,54 +19,62 @@ except:
 
 class DM:
     """
-       pydmdll是一个实现大漠插件免费功能的Python包，无需手动注册dll，直接导入包使用。可以模拟驱动级的鼠标键盘输入。不支持后台的鼠标键盘，以及所有付费功能都不支持。
+    pydmdll是一个实现大漠插件免费功能的Python包，无需手动注册dll，直接导入包使用。
+    可以模拟驱动级的鼠标键盘输入。不支持后台的鼠标键盘，以及所有付费功能都不支持。
+
     """
 
-    def __init__(self, dm_dll_path: str = None) -> None:
+    def __init__(self, dll_path: str = None) -> None:
         """
-        大漠插件初始化并且完成注册dm.dll
+        初始化并且完成注册
 
         Args:
-            dm_dll_path: dm.dll路径。如果你想使用本地的dm.dll,需要传递路径。
+            dll_path: dm.dll路径。必须是全路径
         """
-        self.dm_dll_path = dm_dll_path
-        if dm_dll_path is None:
-            # 没指定dm.dll就用默认的dm.dll
-            self.dm_dll_path = os.path.join(os.path.dirname(__file__.replace('/', '\\')), 'dm.dll')
-            # print("self.dm_dll_path",self.dm_dll_path)
-            # self.dm_dll_path = os.path.join(os.path.dirname(sys.modules["pydmdll"].__file__), 'dm.dll')
-            # print("self.dm_dll_path",self.dm_dll_path)
 
-        self.cmd_dll = 'regsvr32 \"' + self.dm_dll_path + '\" /s'
+        if struct.calcsize("P") * 8 == 64:
+            print("dm.dll不支持64位Python")
+            return None
+        else:
+            self.dll_prefix = "dm.dll"
+        self.dll_path = dll_path
+        if dll_path is None:
+            self.dll_path = os.path.join(os.path.dirname(__file__.replace('/', '\\')), self.dll_prefix)
+        self.cmd_dll = 'regsvr32 \"' + self.dll_path + '\" /s'
+        print(self.cmd_dll)
 
         # 判断是否已经注册注册成功返回版本信息
         if self.__is_reg:
-            print("成功注册："+'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:', self.GetBasePath() + 'dm.dll')
+            print("成功注册：" + 'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:',
+                  os.path.join(self.GetBasePath(), self.dll_prefix))
         else:
             self.__reg_as_admin()
             if self.__is_reg:
-                print("成功注册："+'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:', self.GetBasePath() + 'dm.dll')
+                print("成功注册：" + 'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:',
+                      os.path.join(self.GetBasePath(), self.dll_prefix))
             else:
-                print(time.strftime("成功注册："+'%Y-%m-%d-%H:%M:%S', time.localtime(time.time())) + "：dll注册失败")
+                print("注册失败：" + time.strftime('%Y-%m-%d-%H:%M:%S',
+                                              time.localtime(time.time())) + self.dll_path + "：注册失败")
 
     def __unreg_as_admin(self) -> None:
         """
-        注册表删除已经注册的大漠插件。外部不要调用。
+        删除注册的dll。
 
         Returns:
             无返回值。
         """
-        self.cmd_un_dll = 'regsvr32 /u /s \"' + self.GetBasePath() + 'dm.dll\"'
+        self.cmd_un_dll = 'regsvr32 /u /s \"' + os.path.join(self.GetBasePath(), self.dll_prefix) + '\"'
         if self.__is_admin:
             os.system(self.cmd_un_dll)
         else:
             ctypes.windll.shell32.ShellExecuteW(None, "runas", "cmd.exe", "/C %s" % self.cmd_un_dll, None, 1)
             time.sleep(3)
-            print("删除注册："+'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:', self.GetBasePath() + 'dm.dll')
+            print("删除注册：" + 'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:',
+                  os.path.join(self.GetBasePath(), self.dll_prefix))
 
     def __reg_as_admin(self) -> None:
         """
-        注册dm.dll。外部不要调用。
+        注册dll。
 
         Returns:
             无返回值。
@@ -79,7 +88,7 @@ class DM:
     @property
     def __is_reg(self) -> int:
         """
-        判断dm.dll是否调用成功。外部不要调用。
+        判断dll是否调用成功。
 
         Returns:
             返回int数据类型，1代表调用成功，0代表调用失败。
@@ -88,14 +97,14 @@ class DM:
             self.dm = Dispatch('dm.dmsoft')
             return 1
         except:
-            # traceback.print_exc()
-            print(time.strftime('%Y-%m-%d-%H:%M:%S', time.localtime(time.time())) + '：dm.dll调用失败!')
+            print(
+                "调用失败：" + time.strftime('%Y-%m-%d-%H:%M:%S', time.localtime(time.time())) + self.dll_path + "：调用失败")
             return 0
 
     @property
     def __is_admin(self) -> bool:
         """
-        判断是否具有管理员权限。外部不要调用。
+        判断是否具有管理员权限。
 
         Returns:
             返回bool类型。
@@ -107,17 +116,20 @@ class DM:
 
     def __repr__(self) -> str:
         """
-        自我描述信息。外部不要调用。
+        自我描述信息。
 
         Returns:
-            返回str类型。
+            自我描述信息。
         """
-        ret = '版本：' + str(self.ver()) + '，ID：' + str(self.GetID())
+        ret = 'VER:' + self.ver() + ',ID:' + str(self.GetID()) + ',PATH:' + os.path.join(
+            self.GetBasePath() + self.dll_prefix)
         return ret
+
+    """----------------------------------------取消注册------------------------------------------------"""
 
     def Un_reg(self) -> None:
         """
-        取消已经注册的dm.dll
+        取消已经注册的dll
 
         Returns:
             无返回值
@@ -386,7 +398,7 @@ class DM:
 
         """
 
-        self.dm.GetWindowState(hwnd, flag)
+        return self.dm.GetWindowState(hwnd, flag)
 
     def GetWindowTitle(self, hwnd: int) -> str:
         """

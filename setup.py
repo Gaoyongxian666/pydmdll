@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pydmdll",
-    version="0.0.6",
+    version="0.0.7",
     author="Gaoyongxian666",
     author_email="g1695698547@163.com",
     description="大漠插件dm.dll的Python接口",

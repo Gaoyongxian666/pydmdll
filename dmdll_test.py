@@ -8,14 +8,11 @@
 """
 import os
 import time
-
-
 from pydmdll import DM
 
 if __name__ == '__main__':
     dm = DM()
-    # dm = DM(dm_dll_path="你自己的版本路径")
-
+    # dm = DM(dll_path="你自己的版本路径-绝对路径")
     # 取消注册
     # dm.Un_reg()
 
@@ -28,11 +25,15 @@ if __name__ == '__main__':
     print(txt_hwnd)
 
     # 最大化指定窗口,同时激活窗口.
-    f = dm.SetWindowState(txt_hwnd, 1)
+    f = dm.SetWindowState(txt_hwnd, 4)
     # print(f)
 
     # 使记事本窗口移动
     dm.MoveWindow(txt_hwnd, 10, 10)
+
+    print("GetWindowProcessPath",dm.GetWindowProcessPath(txt_hwnd))
+
+    print("dm.GetWindowState(txt_hwnd,1)",dm.GetWindowState(txt_hwnd,4))
 
     # 打印注册路径
     path = dm.GetBasePath()

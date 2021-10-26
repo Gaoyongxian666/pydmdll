@@ -10,7 +10,7 @@ Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也�
 
 ### 简介
 
-`pydmdll`**仅支持32位Python3**，实现了大漠插件免费功能部分，内部封装的是`V3.1233`版本的`dm.dll`.初衷是为了解决鼠标在游戏内部无法拖拽的问题。
+`pydmdll`**仅支持32位Python**，实现了大漠插件免费功能部分，内部封装的是`V3.1233`版本的`dm.dll`.初衷是为了解决鼠标在游戏内部无法拖拽的问题。
 
 ### 项目
 
@@ -19,7 +19,7 @@ Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也�
 
 ### 功能  
 
-* 模拟键盘：输入，输出，按键，点击等
+* 键盘鼠标：输入，输出，按键，点击等
 * 窗口功能：最小化，激活，移动，获取窗口句柄等
 * 基本功能：剪贴板，蜂鸣器等
 
@@ -28,12 +28,13 @@ Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也�
     pip install pydmdll
 
 ### 开始
+    import os
+    import time
     from pydmdll import DM
-        
+    
     if __name__ == '__main__':
         dm = DM()
-        # dm = DM(dm_dll_path="你自己的版本路径")
-    
+        # dm = DM(dll_path="你自己的版本路径-绝对路径")
         # 取消注册
         # dm.Un_reg()
     
@@ -46,15 +47,22 @@ Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也�
         print(txt_hwnd)
     
         # 最大化指定窗口,同时激活窗口.
-        f = dm.SetWindowState(txt_hwnd, 1)
+        f = dm.SetWindowState(txt_hwnd, 4)
         # print(f)
     
         # 使记事本窗口移动
         dm.MoveWindow(txt_hwnd, 10, 10)
     
+        print("GetWindowProcessPath",dm.GetWindowProcessPath(txt_hwnd))
+    
+        print("dm.GetWindowState(txt_hwnd,1)",dm.GetWindowState(txt_hwnd,4))
+    
         # 打印注册路径
         path = dm.GetBasePath()
         print(path)
+    
+        # 获取剪贴板
+        print(dm.GetClipboard())
     
         # 获取标题还有.py的所有句柄
         # 注意：返回的是str，但句柄必须是int类型，要强行转化
@@ -70,6 +78,7 @@ Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也�
         dm.MoveR(40, 10)
 
 ### 注意
+
     在线程里面使用dm，要注意初始化pythoncom，否则每次都要注册DM，单线程情况下不用设置。
 
     import pythoncom
@@ -88,12 +97,12 @@ Python模拟鼠标键盘的包有很多，它们的文档也很全，功能也�
 
 ### 其他
 
-`pydmdll`可以直接使用，默认使用的是内部封装的是`V3.1233`版本的`dm.dll`，也可以指定本地的`dm.dll`。
+`pydmdll`仅仅封装了免费接口，默认使用的是内部封装的是`V3.1233`版本的`dm.dll`，也可以指定本地的`dm.dll`。
 
 `大漠插件`是用vb语言写的一个闭源且收费的的`dll`，`V3.1233`是其最后一个免费的版本，当然也仅是免费使用部分功能。  
 
 
-### 键盘代码
+### 键盘
 
 | key_str   | 虚拟键码 |
 | --------- | -------- |
